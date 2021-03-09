@@ -1,8 +1,8 @@
-# ello
+# HelloG
 
-A new Flutter application.
+A new Flutter chat application.This application is using firebase authentication for sign in or sign up and firestore for storing all data.Messages are not encrypted yet!
 
-## Getting Started
+# Getting Started
 
 This project is a starting point for a Flutter application.
 
