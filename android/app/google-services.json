@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "417473592855",
+    "project_id": "hellog-b92e6",
+    "storage_bucket": "hellog-b92e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417473592855:android:9b52c211a2dc60f504a652",
+        "android_client_info": {
+          "package_name": "com.example.ello"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417473592855-umd0778hc3cd7tegivi162n4eeuphp7h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ello",
+            "certificate_hash": "c378a342f67cc6e7338eba71dfedeeb9b2a8f4dc"
+          }
+        },
+        {
+          "client_id": "417473592855-qordrceomtek1ga9or03b0lq5nv3ahhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfkhKBUveplaPVyrya6PUtxsy-adpzqok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417473592855-qordrceomtek1ga9or03b0lq5nv3ahhf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
