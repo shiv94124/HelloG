@@ -38,9 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ? true
                             : false);
                   })
-              : Container(
-                  child: Text("There is no message"),
-                );
+              : Container();
         });
   }
 
@@ -115,7 +113,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                 color: Colors.white,
                                 child: Row(
                                   children: [
-                                    SizedBox(width: 16.0,),
+                                    SizedBox(
+                                      width: 16.0,
+                                    ),
                                     Expanded(
                                       child: TextField(
                                         controller: messageController,
@@ -130,7 +130,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 2.0,),
+                        SizedBox(
+                          width: 2.0,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: CircleAvatar(
@@ -142,7 +144,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                     Map<String, dynamic> chatMessage = {
                                       'content': messageController.text,
                                       'send_by': GetMyInfo.myName,
-                                      'time': DateTime.now().millisecondsSinceEpoch,
+                                      'time':
+                                          DateTime.now().millisecondsSinceEpoch,
                                     };
                                     await fireStoreService.addMessage(
                                         widget.chatRoomId, chatMessage);
