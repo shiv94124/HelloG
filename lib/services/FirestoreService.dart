@@ -18,6 +18,9 @@ class FireStoreService {
   getUserInfo() async {
    return  _firestore.collection('users').doc(auth.currentUser.uid).get().asStream();
   }
+  getSearchedUserInfo(String searchedUserId){
+    return _firestore.collection('users').doc(searchedUserId).get();
+  }
 
   getUserByMobileNo(String mobileNo) async {
     return await _firestore

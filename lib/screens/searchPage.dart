@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ChatScreen.dart';
+import 'SearchedUserInfo.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -19,11 +20,17 @@ class _SearchPageState extends State<SearchPage> {
   QuerySnapshot searchQuerySnapshot;
   bool haveUserSearched = false;
   SharedPreferences prefs;
+  String invitedName;
 
   Widget userTile(String name, String mobileNo) {
     return ListTile(
       leading: CircleAvatar(
         radius: 30,
+        child: Text(searchQuerySnapshot.docs[0]
+            .data()['name']
+            .toString()
+            .toUpperCase()
+            .substring(0, 1)),
       ),
       title: Text(
         name,
@@ -33,6 +40,12 @@ class _SearchPageState extends State<SearchPage> {
         mobileNo,
         style: TextStyle(fontSize: 16),
       ),
+      onTap: () {
+        Navigator.of(context).push(CupertinoPageRoute(
+            builder: (context) => SearchedUserInfo(
+                  searchedUserInfoSnapshot: searchQuerySnapshot,
+                )));
+      },
       trailing: ElevatedButton(
         onPressed: () async {
           prefs = await SharedPreferences.getInstance();
@@ -63,6 +76,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget userInviteTile(String mobileNo) {
     return ListTile(
       leading: CircleAvatar(
+        child: Icon(Icons.person),
         radius: 30,
       ),
       title: Text(
@@ -96,7 +110,9 @@ class _SearchPageState extends State<SearchPage> {
                       .substring(3, 13),
                 );
               })
-          : userInviteTile(searchController.text);
+          : invitedName.length == 10
+              ? userInviteTile(invitedName)
+              : Container();
     }
 
     return Scaffold(
@@ -106,6 +122,7 @@ class _SearchPageState extends State<SearchPage> {
             icon: Icon(Icons.search),
             onPressed: () {
               if (searchController.text.isNotEmpty) {
+                invitedName = searchController.text;
                 fireStoreService
                     .getUserByMobileNo(searchController.text)
                     .then((value) {
@@ -125,7 +142,10 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: haveUserSearched
-          ? searchWidget()
+          ? Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: searchWidget(),
+            )
           : Container(
               child: Center(child: Text("No User has been searched yet!")),
             ),
