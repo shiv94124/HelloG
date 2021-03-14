@@ -1,3 +1,4 @@
+import 'package:ello/screens/registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,10 @@ class FirebaseAuthService {
     final PhoneVerificationCompleted verificationCompleted =
         (AuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
+      if (_auth.currentUser != null) {
+        Navigator.of(context)
+            .push(CupertinoPageRoute(builder: (context) => RegistrationPage(mobileNo: _auth.currentUser.phoneNumber,)));
+      }
     };
 //
     final PhoneVerificationFailed verificationFailed =
@@ -63,6 +68,10 @@ class FirebaseAuthService {
       smsCode: smsOTP,
     );
     await _auth.signInWithCredential(credential);
+    if (_auth.currentUser != null) {
+      Navigator.of(context)
+          .push(CupertinoPageRoute(builder: (context) => RegistrationPage(mobileNo: _auth.currentUser.phoneNumber)));
+    }
   }
 
   Future signOut() async {

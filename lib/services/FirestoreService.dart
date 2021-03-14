@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ello/services/GetMyInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FireStoreService {
@@ -15,10 +16,16 @@ class FireStoreService {
         .then((value) => print("user is added"))
         .catchError((error) => print("user is not added $error"));
   }
+
   getUserInfo() async {
-   return  _firestore.collection('users').doc(auth.currentUser.uid).get().asStream();
+    return await  _firestore
+        .collection('users')
+        .doc(auth.currentUser.uid)
+        .get();
+
   }
-  getSearchedUserInfo(String searchedUserId){
+
+  getSearchedUserInfo(String searchedUserId) {
     return _firestore.collection('users').doc(searchedUserId).get();
   }
 
@@ -68,8 +75,17 @@ class FireStoreService {
   getPeerUserInfo(String chatRoomId) async {
     return _firestore.collection('chatRoom').doc(chatRoomId).get().asStream();
   }
-  updateChatRoomData(String chatRoomId,chatRoomData)async{
-    await _firestore.collection('chatRoom').doc(chatRoomId).update(chatRoomData);
+
+  updateChatRoomData(String chatRoomId, chatRoomData) async {
+    await _firestore
+        .collection('chatRoom')
+        .doc(chatRoomId)
+        .update(chatRoomData);
   }
 
+  getPeerUserName(String chatRoomId) async {
+    String peerUserId;
+    peerUserId=chatRoomId.replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "");
+    return await _firestore.collection('users').where('id',isEqualTo: peerUserId).get();
+  }
 }

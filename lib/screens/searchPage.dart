@@ -50,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
         onPressed: () async {
           prefs = await SharedPreferences.getInstance();
           List<String> usersId = [
-            prefs.getString('id'),
+            FirebaseAuth.instance.currentUser.uid,
             searchQuerySnapshot.docs[0].data()['id']
           ];
           String chatRoomId = getChatRoomId(
@@ -61,6 +61,7 @@ class _SearchPageState extends State<SearchPage> {
                 '${GetMyInfo.myName}${searchQuerySnapshot.docs[0].data()['name']}',
             'users_id': usersId,
             'chat_room_id': chatRoomId,
+            'peer_user_id':searchQuerySnapshot.docs[0].data()['id'].toString(),
           };
           fireStoreService.addChatRoom(chatRoom, chatRoomId);
           Navigator.of(context).pushReplacement(CupertinoPageRoute(
@@ -90,10 +91,6 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +133,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
         title: TextField(
+          autofocus: false,
           decoration: InputDecoration(
               hintText: "Search by Mobile No", border: InputBorder.none),
           controller: searchController = TextEditingController(),
@@ -143,12 +141,13 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: haveUserSearched
           ? Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: searchWidget(),
-            )
+        padding: const EdgeInsets.all(5.0),
+        child: searchWidget(),
+      )
           : Container(
-              child: Center(child: Text("No User has been searched yet!")),
-            ),
+        child: Center(child: Text("No User has been searched yet!")),
+      ),
+
     );
   }
 

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ello/services/FirestoreService.dart';
-import 'package:ello/services/GetMyInfo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +17,9 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
   final FireStoreService fireStoreService = FireStoreService();
   Stream<QuerySnapshot> chats;
+  QuerySnapshot peerUserNameSnapshot;
   Stream<DocumentSnapshot> peerSnapshot;
+  DocumentSnapshot currentUserInfo;
   SharedPreferences prefs;
   Stream<DocumentSnapshot> currentUserData;
   Map<String, dynamic> userData;
@@ -34,7 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     return MessageTile(
                         message: snapshot.data.docs[index].data()['content'],
                         sendByMe: snapshot.data.docs[index].data()['send_by'] ==
-                                GetMyInfo.myName
+                                FirebaseAuth.instance.currentUser.uid
                             ? true
                             : false);
                   })
@@ -47,10 +49,13 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       isLoading = true;
     });
-    fireStoreService.getPeerUserInfo(widget.chatRoomId).then((value) {
+    fireStoreService.getPeerUserName(widget.chatRoomId).then((value) {
       setState(() {
-        peerSnapshot = value;
+        peerUserNameSnapshot = value;
       });
+    });
+    fireStoreService.getUserInfo().then((value) {
+      currentUserInfo = value;
     });
     fireStoreService.getChats(widget.chatRoomId).then((value) {
       setState(() {
@@ -79,23 +84,15 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
               ),
-              title: StreamBuilder(
-                stream: peerSnapshot,
-                builder: (context, snapshot) {
-                  return snapshot.hasData
-                      ? Text(
-                          snapshot.data
-                              .data()['user_name']
-                              .toString()
-                              .replaceAll(GetMyInfo.myName, ""),
-                          textAlign: TextAlign.start,
-                        )
-                      : Container();
-                },
+              title: Text(
+                peerUserNameSnapshot != null
+                    ? peerUserNameSnapshot.docs[0].data()['name']
+                    : "",
+                textAlign: TextAlign.start,
               ),
             ),
             body: Container(
-              color: Colors.black45,
+              color: Colors.lightBlue[100],
               child: Column(
                 children: [
                   Expanded(child: chatStreamWidget()),
@@ -143,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   if (messageController.text.isNotEmpty) {
                                     Map<String, dynamic> chatMessage = {
                                       'content': messageController.text,
-                                      'send_by': GetMyInfo.myName,
+                                      'send_by': FirebaseAuth.instance.currentUser.uid,
                                       'time':
                                           DateTime.now().millisecondsSinceEpoch,
                                     };

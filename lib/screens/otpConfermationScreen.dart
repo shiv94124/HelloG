@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ello/screens/chatroom.dart';
-import 'package:ello/screens/registration.dart';
 import 'package:ello/services/FirebaseAuthService.dart';
 import 'package:ello/services/GetMyInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,24 +32,7 @@ class _OtpConfirmationScreenState extends State<OtpConfirmationScreen> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Please enter valid OTP $e")));
     }
-    if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseFirestore.instance
-          .collection('users')
-          .where('id', isEqualTo: '${FirebaseAuth.instance.currentUser.uid}')
-          .get()
-          .then((value) {
-        userSnapshot = value;
-      });
-      if (userSnapshot.docs.length != 0) {
-        Navigator.of(context)
-            .push(CupertinoPageRoute(builder: (context) => ChatRoom()));
-      } else {
-        Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => RegistrationPage(
-                  mobileNo: widget.mobileNo,
-                )));
-      }
-    }
+
     setState(() {
       isLoading = false;
     });
@@ -84,22 +65,6 @@ class _OtpConfirmationScreenState extends State<OtpConfirmationScreen> {
         isLoading=true;
       });
       GetMyInfo.myId = FirebaseAuth.instance.currentUser.uid;
-      FirebaseFirestore.instance
-          .collection('users')
-          .where('id', isEqualTo: '${FirebaseAuth.instance.currentUser.uid}')
-          .get()
-          .then((value) {
-        userSnapshot = value;
-      });
-      if (userSnapshot.docs.length != 0) {
-        Navigator.of(context)
-            .push(CupertinoPageRoute(builder: (context) => ChatRoom()));
-      } else {
-        Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => RegistrationPage(
-              mobileNo: widget.mobileNo,
-            )));
-      }
       setState(() {
         isLoading=false;
       });
