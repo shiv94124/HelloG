@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,6 @@ class SearchedUserInfo extends StatelessWidget {
         title: Text("User Name"),
       ),
       body: Stack(
-
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -24,28 +24,51 @@ class SearchedUserInfo extends StatelessWidget {
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height * 0.85,
                   width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(color: Colors.blue),
+                  decoration: BoxDecoration(color: Colors.pink[900]),
                 ),
               ),
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 20,),
+              SizedBox(height: 40,),
               Row(
                 children: [
-                  SizedBox(width: 70,),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.grey),
+                  SizedBox(
+                    width: 70,
                   ),
+                  searchedUserInfoSnapshot.docs[0].data()['image_link'] != ""
+                      ? ClipRRect(
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) {
+                              return Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                color: Colors.grey[500],
+                              );
+                            },
+                            imageUrl: searchedUserInfoSnapshot.docs[0]
+                                .data()['image_link'],
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        )
+                      : Container(
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.pink[100]),
+                        ),
                 ],
               ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 40,
+              ),
               Row(
                 children: [
                   SizedBox(
@@ -54,11 +77,16 @@ class SearchedUserInfo extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Name",style: TextStyle(color: Colors.white),),
+                      Text(
+                        "Name",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       Text(
                         searchedUserInfoSnapshot.docs[0].data()['name'],
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30,color: Colors.white),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                            color: Colors.white),
                       ),
                     ],
                   ),
@@ -75,10 +103,13 @@ class SearchedUserInfo extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("About",style: TextStyle(color: Colors.white),),
+                      Text(
+                        "About",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       Text(
                         searchedUserInfoSnapshot.docs[0].data()['about'],
-                        style: TextStyle(fontSize: 20,color: Colors.white),
+                        style: TextStyle(fontSize: 20, color: Colors.white),
                       ),
                     ],
                   ),
@@ -93,8 +124,14 @@ class SearchedUserInfo extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Joined on",style: TextStyle(color: Colors.white),),
-                      Text("DD/MM/YY",style: TextStyle(fontSize: 20,color: Colors.white),),
+                      Text(
+                        "Joined on",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "DD/MM/YY",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
                     ],
                   ),
                 ],
@@ -108,8 +145,14 @@ class SearchedUserInfo extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Last Seen",style: TextStyle(color: Colors.white),),
-                      Text("--/--",style: TextStyle(fontSize: 20,color: Colors.white),),
+                      Text(
+                        "Last Seen",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "--/--",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
                     ],
                   ),
                 ],

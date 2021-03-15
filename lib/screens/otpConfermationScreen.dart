@@ -80,7 +80,7 @@ class _OtpConfirmationScreenState extends State<OtpConfirmationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Verifying This Mobile No ${widget.mobileNo} ",
+              "Verifying This Mobile No ${widget.mobileNo.toString().substring(3,13)} ",
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -88,16 +88,19 @@ class _OtpConfirmationScreenState extends State<OtpConfirmationScreen> {
             ),
             Form(
               key: formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _otpEditingController,
-                    decoration: _inputDecoration("OTP", null),
-                    validator: (val) {
-                      return val.length < 6 ? "Please enter valid OTP" : null;
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _otpEditingController,
+                      decoration: _inputDecoration("OTP", null),
+                      validator: (val) {
+                        return val.length < 6 ? "Please enter valid OTP" : null;
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -114,12 +117,8 @@ class _OtpConfirmationScreenState extends State<OtpConfirmationScreen> {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xff007EF4),
-                        const Color(0xff2A75BC)
-                      ],
-                    )),
+                    color: Colors.pink
+                    ),
                 child: isLoading==false ? Text(
                   "Sign In",
                   style: TextStyle(color: Colors.white),

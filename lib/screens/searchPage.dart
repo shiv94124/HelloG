@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ello/services/FirestoreService.dart';
 import 'package:ello/services/GetMyInfo.dart';
@@ -24,14 +25,17 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget userTile(String name, String mobileNo) {
     return ListTile(
-      leading: CircleAvatar(
-        radius: 30,
-        child: Text(searchQuerySnapshot.docs[0]
-            .data()['name']
-            .toString()
-            .toUpperCase()
-            .substring(0, 1)),
-      ),
+      leading: searchQuerySnapshot!=null && searchQuerySnapshot.docs[0].data()['image_link']!=""?
+      ClipRRect(
+        child: CachedNetworkImage(
+          imageUrl: searchQuerySnapshot.docs[0].data()['image_link'],
+          height: 55,
+          width: 55,
+          fit: BoxFit.cover,
+        ),
+        borderRadius: BorderRadius.all(Radius.circular(125)),
+      ):Icon(Icons.account_circle_rounded,size:55,color: Colors.grey[500],)
+      ,
       title: Text(
         name,
         style: TextStyle(fontSize: 20),
@@ -76,10 +80,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget userInviteTile(String mobileNo) {
     return ListTile(
-      leading: CircleAvatar(
-        child: Icon(Icons.person),
-        radius: 30,
-      ),
+      leading:  Icon(Icons.account_circle_rounded,size: 55,color: Colors.grey[500],),
       title: Text(
         mobileNo,
         style: TextStyle(fontSize: 20),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ello/services/FirestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,15 +39,22 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(
               height: 40,
             ),
-            CircleAvatar(
-              radius: 80,
-            ),
+            currentUserSnapshot!=null && currentUserSnapshot.data()['image_link']!=""?
+            ClipRRect(
+              child: CachedNetworkImage(
+                imageUrl: currentUserSnapshot.data()['image_link'],
+                height: 200,
+                width: 200,
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(125)),
+            ): Icon(Icons.account_circle_rounded,size: 200,color: Colors.white,),
             SizedBox(height: 30),
             Container(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.person),
+                  Icon(Icons.person,color: Colors.white,),
                   SizedBox(
                     width: 20,
                   ),
@@ -54,33 +62,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Name"),
+                        Text("Name",style: TextStyle(color: Colors.white),),
                         Text(
                           currentUserSnapshot != null
                               ? currentUserSnapshot.data()['name']
                               : "",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                            "This is your user name. This will be visible to other's HelloG Account"),
+                            "This is your user name. This will be visible to other's HelloG Account",style: TextStyle(color: Colors.white),),
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => CurrentUserUpdatePage(name: currentUserSnapshot != null
-                              ? currentUserSnapshot.data()['name']
-                              : "",about: currentUserSnapshot != null
-                              ? currentUserSnapshot.data()['about']
-                              : "",)));
-                    },
-                  ),
+
                 ],
               ),
             ),
@@ -89,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Divider(
               height: 0.0,
-              color: Colors.black45,
+              color: Colors.white,
               indent: 95.0,
               endIndent: 10.0,
             ),
@@ -100,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info_outline_rounded),
+                  Icon(Icons.info_outline_rounded,color: Colors.white,),
                   SizedBox(
                     width: 20,
                   ),
@@ -108,24 +106,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("About"),
+                        Text("About",style: TextStyle(color: Colors.white),),
                         Text(currentUserSnapshot != null
                             ? currentUserSnapshot.data()['about']
-                            : ""),
+                            : "",style: TextStyle(color: Colors.white),),
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => CurrentUserUpdatePage(name: currentUserSnapshot != null
-                              ? currentUserSnapshot.data()['name']
-                              : "",about: currentUserSnapshot != null
-                              ? currentUserSnapshot.data()['about']
-                              : "",)));
-                    },
-                  ),
+
                 ],
               ),
             ),
@@ -134,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Divider(
               height: 0.0,
-              color: Colors.black45,
+              color: Colors.white,
               indent: 95.0,
               endIndent: 10.0,
             ),
@@ -145,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.phone_android_rounded),
+                  Icon(Icons.phone_android_rounded,color: Colors.white,),
                   SizedBox(
                     width: 20,
                   ),
@@ -153,12 +141,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Mobile No"),
+                        Text("Mobile No",style: TextStyle(color: Colors.white),),
                         Text(
                           FirebaseAuth.instance.currentUser.phoneNumber
                               .toString()
                               .substring(3, 13),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20,color: Colors.white),
                         ),
                       ],
                     ),
@@ -168,6 +156,19 @@ class _ProfilePageState extends State<ProfilePage> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.edit),
+        onPressed: () {
+          Navigator.of(context).push(CupertinoPageRoute(
+              builder: (context) => CurrentUserUpdatePage(name: currentUserSnapshot != null
+                  ? currentUserSnapshot.data()['name']
+                  : "",about: currentUserSnapshot != null
+                  ? currentUserSnapshot.data()['about']
+                  : "",image_link: currentUserSnapshot != null
+                  ? currentUserSnapshot.data()['image_link']
+                  : "",)));
+        },
       ),
     );
   }

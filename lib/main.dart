@@ -1,3 +1,4 @@
+import 'package:ello/screens/registration.dart';
 import 'package:ello/services/routeBasedOnAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,12 +23,21 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              home: RouteWidget().checkAuth(),
-            );
+            title: 'Flutter Demo',
+            theme: ThemeData(
+                primaryColor: Colors.pink,
+                scaffoldBackgroundColor: Colors.pink[200],
+                buttonColor: Colors.pink,
+            elevatedButtonTheme:ElevatedButtonThemeData(style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+            if (states.contains(MaterialState.pressed))
+            return Colors.pink[300];
+            return Colors.pink; // Use the component's default.
+            },)) ),
+              floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.pink),
+            ),
+            home: RouteWidget().checkAuth(),
+          );
         }
 
         return Center(child: CircularProgressIndicator());

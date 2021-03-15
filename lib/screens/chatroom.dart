@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ello/screens/ChatScreen.dart';
 import 'package:ello/screens/profile.dart';
@@ -48,14 +49,31 @@ class _ChatRoomState extends State<ChatRoom> {
                       child: Column(
                         children: [
                           ListTile(
-                            leading: CircleAvatar(
-                              radius: 30,
-                            ),
+                            leading: peerUserNameSnapshot != null &&
+                                    peerUserNameSnapshot.docs[0]
+                                            .data()['image_link'] !=
+                                        ""
+                                ? ClipRRect(
+                                    child: CachedNetworkImage(
+                                      imageUrl: peerUserNameSnapshot.docs[0]
+                                          .data()['image_link'],
+                                      height: 55,
+                                      width: 55,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(125)),
+                                  )
+                                : Icon(
+                                    Icons.account_circle_rounded,
+                                    size: 55,
+                                    color: Colors.white,
+                                  ),
                             title: Text(
                               peerUserNameSnapshot != null
                                   ? peerUserNameSnapshot.docs[0].data()['name']
                                   : "",
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w500),
                             ),
                             onTap: () {
                               Navigator.of(context).push(CupertinoPageRoute(
@@ -67,7 +85,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           ),
                           Divider(
                             height: 0.0,
-                            color: Colors.black45,
+                            color: Colors.white,
                             indent: 95.0,
                             endIndent: 10.0,
                           ),
@@ -105,9 +123,10 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           padding: EdgeInsets.only(top: 70),
-          color: Colors.pinkAccent,
+          color: Colors.pink[400],
           child: Padding(
             padding: const EdgeInsets.only(left: 22.0),
             child: Column(
@@ -115,9 +134,23 @@ class _ChatRoomState extends State<ChatRoom> {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 30,
-                    ),
+                    currentUserInfo != null &&
+                            currentUserInfo.data()['image_link'] != ""
+                        ? ClipRRect(
+                            child: CachedNetworkImage(
+                              imageUrl: currentUserInfo.data()['image_link'],
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(125)),
+                          )
+                        : Icon(
+                            Icons.account_circle_rounded,
+                            size: 60,
+                            color: Colors.white,
+                          ),
                     SizedBox(
                       width: 15,
                     ),
@@ -150,7 +183,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   ],
                 ),
                 SizedBox(
-                  height: 125,
+                  height: 90,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -186,7 +219,52 @@ class _ChatRoomState extends State<ChatRoom> {
                   ],
                 ),
                 SizedBox(
-                  height: 275,
+                  height: 35,
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.star),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Starred Messages",
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.archive_rounded),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Archive",
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.policy_sharp),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Status",
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 150,
                 ),
                 GestureDetector(
                   onTap: () async {
@@ -270,6 +348,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 ),
               ),
               floatingActionButton: FloatingActionButton(
+                backgroundColor: Colors.pink,
                 onPressed: () {
                   Navigator.of(context).push(CupertinoPageRoute(
                       builder: (BuildContext context) => SearchPage()));

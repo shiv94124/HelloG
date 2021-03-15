@@ -17,14 +17,14 @@ class _SignUpState extends State<SignUp> {
             borderSide: BorderSide(color: Color.fromRGBO(252, 252, 252, 1))),
         labelText: labelText,
         enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromRGBO(151, 151, 151, 1))),
+            borderSide: BorderSide(color: Colors.black)),
         hintStyle: TextStyle(color: Color.fromRGBO(252, 252, 252, 1)),
         icon: icon,
         errorStyle: TextStyle(color: Color.fromRGBO(248, 218, 87, 1)),
         errorBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Color.fromRGBO(248, 218, 87, 1))),
         focusedErrorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromRGBO(248, 218, 87, 1))));
+            borderSide: BorderSide(color: Colors.white)));
   }
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -38,20 +38,23 @@ class _SignUpState extends State<SignUp> {
           children: [
             Form(
               key: formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _mobileNoEditingController,
-                    decoration: _inputDecoration(
-                        "Mobile No", Icon(Icons.phone_android)),
-                    validator: (val) {
-                      return val.length < 10
-                          ? "Please Enter valid Mobile No"
-                          : null;
-                    },
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _mobileNoEditingController,
+                      decoration: _inputDecoration(
+                          "Mobile No", Icon(Icons.phone_android)),
+                      validator: (val) {
+                        return val.length < 10
+                            ? "Please Enter valid Mobile No"
+                            : null;
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -70,12 +73,7 @@ class _SignUpState extends State<SignUp> {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xff007EF4),
-                        const Color(0xff2A75BC)
-                      ],
-                    )),
+                      color: Colors.pink),
                 child: Text(
                   "Sign Up With The OTP",
                   style: TextStyle(color: Colors.white),

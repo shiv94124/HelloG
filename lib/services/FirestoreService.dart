@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ello/services/GetMyInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FireStoreService {
@@ -25,8 +24,12 @@ class FireStoreService {
 
   }
 
-  getSearchedUserInfo(String searchedUserId) {
-    return _firestore.collection('users').doc(searchedUserId).get();
+  retrieveCurrentUserData(String currentUserId) async {
+    return await _firestore.collection('users').where("id",isEqualTo: currentUserId).get();
+  }
+
+  getSearchedUserInfo(String searchedUserId) async {
+    return await _firestore.collection('users').doc(searchedUserId).get();
   }
 
   getUserByMobileNo(String mobileNo) async {
@@ -88,4 +91,8 @@ class FireStoreService {
     peerUserId=chatRoomId.replaceAll("_", "").replaceAll(FirebaseAuth.instance.currentUser.uid, "");
     return await _firestore.collection('users').where('id',isEqualTo: peerUserId).get();
   }
+  updateCharRoomUserName() async {
+    return await _firestore.collection('chatRoom').where('id',arrayContains: FirebaseAuth.instance.currentUser.uid).get();
+  }
+
 }

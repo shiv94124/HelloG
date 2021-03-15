@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ello/services/FirestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,7 +81,21 @@ class _ChatScreenState extends State<ChatScreen> {
                     SizedBox(
                       width: 8,
                     ),
-                    CircleAvatar(),
+                    peerUserNameSnapshot != null &&
+                            peerUserNameSnapshot.docs[0].data()['image_link'] !=
+                                ""
+                        ? ClipRRect(
+                            child: CachedNetworkImage(
+                              imageUrl: peerUserNameSnapshot.docs[0]
+                                  .data()['image_link'],
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(125)),
+                          )
+                        : Icon(Icons.account_circle_rounded,size: 40,color: Colors.white,),
                   ],
                 ),
               ),
@@ -92,7 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             body: Container(
-              color: Colors.lightBlue[100],
+              color: Colors.pink[100],
               child: Column(
                 children: [
                   Expanded(child: chatStreamWidget()),
@@ -107,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Container(
-                                color: Colors.white,
+                                color: Colors.pink,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -117,7 +132,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                       child: TextField(
                                         controller: messageController,
                                         decoration: InputDecoration(
-                                            hintText: "Type here",
+                                            hintText: "Type here...",
+                                            hintStyle: TextStyle(color: Colors.white),
                                             border: InputBorder.none),
                                       ),
                                     ),
@@ -133,6 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: CircleAvatar(
+                            backgroundColor: Colors.pink,
                             radius: 22,
                             child: IconButton(
                                 icon: Icon(Icons.send),
@@ -140,7 +157,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                   if (messageController.text.isNotEmpty) {
                                     Map<String, dynamic> chatMessage = {
                                       'content': messageController.text,
-                                      'send_by': FirebaseAuth.instance.currentUser.uid,
+                                      'send_by':
+                                          FirebaseAuth.instance.currentUser.uid,
                                       'time':
                                           DateTime.now().millisecondsSinceEpoch,
                                     };
@@ -178,31 +196,31 @@ class MessageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-          top: 8, bottom: 8, left: sendByMe ? 0 : 24, right: sendByMe ? 24 : 0),
+          top: 12,
+          bottom: 12,
+          left: sendByMe ? 0 : 24,
+          right: sendByMe ? 24 : 0),
       alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin:
-            sendByMe ? EdgeInsets.only(left: 30) : EdgeInsets.only(right: 30),
-        padding: EdgeInsets.only(top: 17, bottom: 17, left: 20, right: 20),
+        padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
         decoration: BoxDecoration(
           borderRadius: sendByMe
               ? BorderRadius.only(
-                  topLeft: Radius.circular(23),
-                  topRight: Radius.circular(23),
-                  bottomLeft: Radius.circular(23))
+                  topLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10))
               : BorderRadius.only(
-                  topLeft: Radius.circular(23),
-                  topRight: Radius.circular(23),
-                  bottomRight: Radius.circular(23)),
-          color: sendByMe ? Colors.blue : Colors.green,
+                  bottomLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
+          color: sendByMe ? Colors.pink : Colors.pink[50],
         ),
         child: Text(message,
             textAlign: TextAlign.start,
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'OverpassRegular',
-                fontWeight: FontWeight.w300)),
+                color: Colors.black,
+                fontSize: 17,
+                fontWeight: FontWeight.normal)),
       ),
     );
   }
