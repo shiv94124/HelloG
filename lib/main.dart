@@ -1,4 +1,3 @@
-import 'package:ello/screens/registration.dart';
 import 'package:ello/services/routeBasedOnAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
