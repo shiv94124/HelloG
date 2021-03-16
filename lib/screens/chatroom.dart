@@ -351,7 +351,7 @@ class _ChatRoomState extends State<ChatRoom> {
                 backgroundColor: Colors.pink,
                 onPressed: () {
                   Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (BuildContext context) => SearchPage()));
+                      builder: (BuildContext context) => SearchPage(currentUserInfo: currentUserInfo,)));
                 },
                 child: Icon(Icons.search),
               ),

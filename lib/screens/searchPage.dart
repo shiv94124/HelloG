@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ello/services/FirestoreService.dart';
-import 'package:ello/services/GetMyInfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,8 @@ import 'ChatScreen.dart';
 import 'SearchedUserInfo.dart';
 
 class SearchPage extends StatefulWidget {
+  final DocumentSnapshot currentUserInfo;
+  SearchPage({this.currentUserInfo});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -62,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
               searchQuerySnapshot.docs[0].data()['id'].toString());
           Map<String, dynamic> chatRoom = {
             'user_name':
-                '${GetMyInfo.myName}${searchQuerySnapshot.docs[0].data()['name']}',
+                '${widget.currentUserInfo.data()['name']}${searchQuerySnapshot.docs[0].data()['name']}',
             'users_id': usersId,
             'chat_room_id': chatRoomId,
             'peer_user_id':searchQuerySnapshot.docs[0].data()['id'].toString(),
