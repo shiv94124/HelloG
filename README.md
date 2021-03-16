@@ -1,6 +1,6 @@
 # HelloG
 
-A new Flutter chat application.This application is using firebase authentication for sign in or sign up and firestore for storing all data.Messages are not encrypted yet!
+A new Flutter chat application.This application is using firebase authentication for sign in or sign up and cloud firestore for storing all database.it is a NoSQL database, and using cloud storage too, for storing all files(photos etc).Messages are not encrypted yet!
 
 # Getting Started
 
